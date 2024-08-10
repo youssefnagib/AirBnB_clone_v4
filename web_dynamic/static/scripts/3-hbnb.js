@@ -25,7 +25,7 @@ function set_api_available() {
   })
 }
 function Places () {
-    const PLACES_URL = `http://${HOST}:5001/api/v1/places_search/`;
+    const PLACES_URL = `http://0.0.0.0:5001/api/v1/places_search/`;
     $.ajax({
       url: PLACES_URL,
       type: 'POST',
