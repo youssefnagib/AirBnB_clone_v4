@@ -1,22 +1,50 @@
 $(document).ready(init);
 
 const amenity_Obj = {};
-const stateObj = {};
-const cityObj = {};
-let obj = {};
-function checkedObjects (n_Obj) {
-  if ($(this).is(':checked')) {
-    obj[$(this).attr('data-name')] = $(this).attr('data-id');
-} else if ($(this).is(':not(:checked)')) {
-  delete obj[$(this).attr('data-name')];
-}
-  const names = Object.keys(obj);
-  if (n_Obj === 1) {
+const state_City_Obj = {};
+
+function checkbox_input() {
+  $('.amenities .popover input').change(function () {
+    if ($(this).is(':checked')) {
+      amenity_Obj[$(this).attr('data-name')] = $(this).attr('data-id');
+    } else if ($(this).is(':not(:checked)')) {
+      delete amenity_Obj[$(this).attr('data-name')];
+    }
+
+    const amenity_ids = Object.values(amenity_Obj);
+    Places({'amenities': amenity_ids});
+
+    const names = Object.keys(amenity_Obj);
     $('.amenities h4').text(names.sort().join(', '));
-  } else if (n_Obj === 2) {
-    $('.locations h4').text(names.sort().join(', '));
-  }
+  });
+
+
+  $('.state_input').change(function () {
+    if ($(this).is(':checked')) {
+      state_City_Obj[$(this).attr('data-name')] = $(this).attr('data-id');
+    } else {
+      delete state_City_Obj[$(this).attr('data-name')];
+    }
+    update_state_city();
+  });
+
+
+  $('.city_input').change(function () {
+    if ($(this).is(':checked')) {
+      state_City_Obj[$(this).attr('data-name')] = $(this).attr('data-id');
+    } else {
+      delete state_City_Obj[$(this).attr('data-name')];
+    }
+    update_state_city();
+  });
 }
+
+function update_state_city() {
+  const state_city_ids = Object.values(state_City_Obj);
+  const names = Object.keys(state_City_Obj);
+  $('.locations h4').text(names.sort().join(', '));
+}
+
 
 function set_api_available() {
   $.get('http://0.0.0.0:5001/api/v1/status/', function (data) {
@@ -122,7 +150,18 @@ async function Places (queryFilter={}) {
       }
     });
 }
-
+function search_button_click() {
+  const amenity_ids = Object.values(amenity_Obj);
+  const state_city_ids = Object.values(state_City_Obj);
+  
+  const queryFilter = {
+    amenities: amenity_ids,
+    states: state_city_ids,
+    cities: state_city_ids
+  };
+  
+  Places(queryFilter);
+}
 function init() {
   $('.amenities .popover input').change(function () {
     obj = amenityObj;
@@ -138,4 +177,5 @@ function init() {
   });
   set_api_available();
   Places();
+  $('#search_button').click(search_button_click);
 }
