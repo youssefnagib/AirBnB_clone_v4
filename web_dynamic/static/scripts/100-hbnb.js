@@ -88,9 +88,22 @@ function Places (queryFilter={}) {
       }
     });
   }
+  function search_button_click() {
+    const amenity_ids = Object.values(amenity_Obj);
+    const state_city_ids = Object.values(state_City_Obj);
+    
+    const queryFilter = {
+      amenities: amenity_ids,
+      states: state_city_ids,
+      cities: state_city_ids
+    };
+    
+    Places(queryFilter);
+  }
 
 function init () {
   checkbox_input();
   set_api_available();
   Places();
+  $('#search_button').click(search_button_click);
 }
