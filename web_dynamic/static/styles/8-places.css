@@ -99,3 +99,7 @@
 .user {
   margin-bottom: 1.5%;
 }
+
+.review_number {
+  display: inline;
+}
